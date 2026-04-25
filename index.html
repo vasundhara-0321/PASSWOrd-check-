@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Strength Pro</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .title h1 {
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+
+        .title p {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .primary {
+            background: #00c6ff;
+            color: white;
+        }
+
+        .secondary {
+            background: #555;
+            color: white;
+        }
+
+        .generate {
+            background: #28a745;
+            color: white;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .bar {
+            height: 10px;
+            border-radius: 5px;
+            background: #444;
+            margin-top: 10px;
+        }
+
+        .fill {
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        .weak { background:red; width:20%; }
+        .moderate { background:orange; width:40%; }
+        .strong { background:yellow; width:60%; }
+        .excellent { background:#00ff66; width:80%; }
+        .elite { background:#00ffcc; width:100%; }
+
+        .history {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #ddd;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #555;
+            padding: 5px 0;
+        }
+
+        .generated {
+            margin-top: 15px;
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+    </style>
+
+    <script>
+        function togglePassword() {
+            let x = document.getElementById("pwd");
+            x.type = (x.type === "password") ? "text" : "password";
+        }
+    </script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="title">
+        <h1>🔐 Password Strength Pro</h1>
+        <p>Analyze and generate secure passwords</p>
+    </div>
+
+    <form method="POST">
+
+        <div class="input-group">
+            <input id="pwd" type="password" name="password" placeholder="Enter your password">
+        </div>
+
+        <div class="buttons">
+            <button type="button" class="secondary" onclick="togglePassword()">Show</button>
+            <button type="submit" class="primary">Check</button>
+            <button name="generate" class="generate">Generate</button>
+        </div>
+
+    </form>
+
+    {% if generated %}
+        <div class="generated">
+            Generated Password: <strong>{{ generated }}</strong>
+        </div>
+    {% endif %}
+
+    {% if result %}
+    <div class="result">
+        <h3>{{ result[0] }}</h3>
+        <p>Score: {{ result[1] }} / 115</p>
+        <p>Entropy: {{ result[2] }}</p>
+
+        <div class="bar">
+            <div class="fill {{ result[0]|lower }}"></div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if history %}
+    <div class="history">
+        <h4>Recent Activity</h4>
+        {% for h in history %}
+        <div class="history-item">
+            <span>{{ h[0] }}</span>
+            <span>{{ h[1] }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
